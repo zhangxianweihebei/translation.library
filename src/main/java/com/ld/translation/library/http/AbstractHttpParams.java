@@ -1,44 +1,42 @@
 package com.ld.translation.library.http;
 
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public abstract class AbstractHttpParams implements HttpParams{
-	protected final Map<String, String> params = new HashMap<>();
-	
+	protected final FormBody.Builder params = new FormBody.Builder();
+
+	protected final OkHttpClient client = new OkHttpClient.Builder().build();
+
 	@Override
-	public HttpParams put(String key, String value){
-		params.put(key, value);
-		return this;
+	public FormBody.Builder put(String key, String value){
+		params.add(key, value);
+		return params;
 	}
-	
+
 	@Override
 	public String send2String(String baseUrl) throws Exception {
-		CloseableHttpClient httpClient = HttpClients.createDefault();
-		try{
-			CloseableHttpResponse response = send(httpClient, baseUrl);
-			return EntityUtils.toString(response.getEntity());
-		}finally{
-			httpClient.close();
-		}
+		Request request = new Request.Builder()
+				.post(params.build())
+				.url(baseUrl)
+				.build();
+		Response response = send(request, baseUrl);
+		return response.body().string();
 	}
-	
+
 	@Override
 	public InputStream send2InputStream(String baseUrl) throws Exception {
-		CloseableHttpClient httpClient = HttpClients.createDefault();
-		try{
-			CloseableHttpResponse response = send(httpClient, baseUrl);
-			return response.getEntity().getContent();
-		}finally{
-			httpClient.close();
-		}
+		Request request = new Request.Builder()
+				.post(params.build())
+				.url(baseUrl)
+				.build();
+		Response response = send(request, baseUrl);
+		return response.body().byteStream();
 	}
-	
-	abstract protected CloseableHttpResponse send(CloseableHttpClient httpClient, String baseUrl) throws Exception ;
+
+	abstract protected Response send(Request httpClient, String baseUrl) throws Exception ;
 }

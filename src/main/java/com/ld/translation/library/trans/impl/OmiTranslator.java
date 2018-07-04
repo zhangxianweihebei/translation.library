@@ -2,8 +2,8 @@ package com.ld.translation.library.trans.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.ld.translation.library.http.HttpGetParams;
 import com.ld.translation.library.http.HttpParams;
-import com.ld.translation.library.http.HttpPostParams;
 import com.ld.translation.library.trans.AbstractOnlineTranslator;
 import com.ld.translation.library.trans.LANG;
 import com.ld.translation.library.trans.annotation.TranslatorComponent;
@@ -19,10 +19,10 @@ final public class OmiTranslator extends AbstractOnlineTranslator {
 	@Override
 	public String getResponse(LANG from, LANG targ, String query) throws Exception{
 		
-		HttpParams params = new HttpPostParams()
-				.put("languageType", langMap.get(from)+"2"+langMap.get(targ))
-				.put("userDbName", "")
-				.put("sentsToTrans", query);
+		HttpParams params = new HttpGetParams();
+		params.put("languageType", langMap.get(from)+"2"+langMap.get(targ));
+		params.put("userDbName", "");
+		params.put("sentsToTrans", query);
 		
 		return params.send2String("http://www.alifanyi1688.com/transSents.do");
 	}
