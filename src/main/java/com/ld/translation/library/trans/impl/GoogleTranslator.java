@@ -28,7 +28,7 @@ final public class GoogleTranslator extends AbstractOnlineTranslator {
 		params = new HttpGetParams();		//统一采用post，若字符长度小于999用get也可以的
 		String tk = tk(query);
 
-		params.put("client", "t");
+		params.put("client", "webapp");
 		params.put("sl", langMap.get(from));
 		params.put("tl", langMap.get(targ));
 		params.put("hl", "zh-CN");
@@ -42,14 +42,20 @@ final public class GoogleTranslator extends AbstractOnlineTranslator {
 		params.put("dt", "rm");
 		params.put("dt", "ss");
 		params.put("dt", "t");
+		//更新谷歌 参数
+		params.put("swap", "1");
+		params.put("ssel", "5");
+		params.put("tsel", "5");
+		params.put("kc", "1");
+//		params.put("ie", "UTF-8");
 
-		params.put("ie", "UTF-8");
-		params	.put("oe", "UTF-8");
-		params.put("source", "btn");
-		params.put("srcrom", "1");
-		params.put("ssel", "0");
-		params.put("tsel", "0");
-		params.put("kc", "11");
+//		params.put("ie", "UTF-8");
+//		params.put("oe", "UTF-8");
+//		params.put("source", "btn");
+//		params.put("srcrom", "1");
+//		params.put("ssel", "0");
+//		params.put("tsel", "0");
+//		params.put("kc", "11");
 		params.put("tk", tk);
 		params.put("q", query);
 		return params.send2String("http://translate.google.cn/translate_a/single");
@@ -60,14 +66,16 @@ final public class GoogleTranslator extends AbstractOnlineTranslator {
 		JSONArray jsonArray = JSONArray.parseArray(jsonString);
 		JSONArray segments = jsonArray.getJSONArray(0);
 		StringBuilder result = new StringBuilder();
-
-		for(int i=0; i<segments.size(); i++){
-			String string = segments.getJSONArray(i).getString(0);
-			if(string != null) {
-				result.append(string);
+		if (segments != null){
+			for(int i=0; i<segments.size(); i++){
+				if (segments.get(i) instanceof JSONArray){
+					String string = segments.getJSONArray(i).getString(0);
+					if(string != null) {
+						result.append(string);
+					}
+				}
 			}
 		}
-
 		return new String(result);
 	}
 

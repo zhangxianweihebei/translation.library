@@ -16,12 +16,12 @@ import com.ld.translation.library.trans.factory.TranslatorFactory;
 public class App {
 	public static void main( String[] args) throws Exception{
 		TFactory factory = new TranslatorFactory();
-		String origin = "你好";
+		String origin = "获取文件后缀名";
 		if(args.length > 0) {
 			origin=args[0];
 		}
 		System.out.println("金山 : " + factory.get("jinshan").trans(LANG.ZH, LANG.EN, origin));
 		System.out.println("谷歌 : " + factory.get("google").trans(LANG.ZH, LANG.EN, origin));
-		System.out.println("欧米 : " + factory.get("omi").trans(LANG.ZH, LANG.EN, origin));
+//		System.out.println("欧米 : " + factory.get("omi").trans(LANG.ZH, LANG.EN, origin));
 	}
 }

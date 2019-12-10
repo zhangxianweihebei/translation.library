@@ -23,8 +23,8 @@ import com.ld.translation.library.trans.impl.YoudaoTranslator;
 
 public abstract class AbstractTranslatorFactory implements TFactory {
 	
-	protected Map<String, Translator> translatorMap = new HashMap<>();
-	private List<String> workPackages = new ArrayList<>();
+	protected Map<String, Translator> translatorMap = new HashMap<String, Translator>();
+	private List<String> workPackages = new ArrayList<String>();
 
 	private List<Class<? extends AbstractOnlineTranslator>> translatorClasses = Arrays.asList(
 			BaiduTranslator.class,
@@ -80,7 +80,7 @@ public abstract class AbstractTranslatorFactory implements TFactory {
 	}
 	
 	private List<String> getClassNameByPackage(String packageName) throws URISyntaxException{
-		List<String> classesName = new ArrayList<>();
+		List<String> classesName = new ArrayList<String>();
 		ClassLoader loader = getClass().getClassLoader();
 		URL url = loader.getResource(packageName.replace(".", "/"));
 
